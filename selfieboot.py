@@ -13,6 +13,10 @@ with picamera.PiCamera() as camera:
     img = Image.open('assets/overlay.png')
     # Create an image padded to the required size with
     # mode 'RGB'
+
+    print img.size[0]
+    print img.size[1]
+
     pad = Image.new('RGB', (
         ((img.size[0] + 31) // 32) * 32,
         ((img.size[1] + 15) // 16) * 16,
@@ -22,7 +26,7 @@ with picamera.PiCamera() as camera:
 
     # Add the overlay with the padded image as the source,
     # but the original image's dimensions
-    o = camera.add_overlay(img.tostring(), size=img.size)
+    o = camera.add_overlay(pad.tostring(), size=img.size)
     # By default, the overlay is in layer 0, beneath the
     # preview (which defaults to layer 2). Here we make
     # the new overlay semi-transparent, then move it above
