@@ -7,7 +7,7 @@ from time import sleep
 class Camera(picamera.PiCamera):
     def add_img_overlay(self, filename, alpha = 255, layer = 99):
         img = Image.open(filename)
-        pad = Image.new('RGB', ( ((img.size[0] + 31) // 32) * 32, ((img.size[1] + 15) // 16) * 16, ))
+        pad = Image.new('RGBA', ( ((img.size[0] + 31) // 32) * 32, ((img.size[1] + 15) // 16) * 16, ))
         pad.paste(img, (0, 0))
 
         return camera.add_overlay(pad.tostring(), size=img.size, alpha=alpha, layer=layer)
