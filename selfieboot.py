@@ -37,10 +37,9 @@ with Camera() as camera:
     camera.framerate = 24
     camera.start_preview()
 
+    top_layer = camera.add_img_overlay("assets/overlay.png", where="top", layer=3)
+    bottom_layer = camera.add_img_overlay("assets/overlay.png", where="bottom")
+
     # Wait indefinitely until the user terminates the script
     while True:
-        o = camera.add_img_overlay("assets/overlay.png", where="bottom")
         sleep(1)
-        camera.remove_overlay(o)
-        sleep(1)
-        
