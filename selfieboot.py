@@ -1,10 +1,22 @@
 #!/usr/bin/python
 
+import os.path
+import sys
+if not os.path.isfile("/home/pi/selfieboot/images/alive"):
+    print "ERROR: NO USB STICK WITH ALIVE FILE FOUND IN 'images' FOLDER"
+    sys.exit(1)
+
 import picamera
 import io
 from PIL import Image
 from time import sleep, time
 from random import shuffle
+
+# GPIO
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(17, GPIO.IN, GPIO.PUD_UP)
+GPIO.add_event_detect(17, GPIO.FALLING)
 
 # PARAMS
 COUNTDOWN_TIME = 4
@@ -20,14 +32,11 @@ screen_height_ = 768
 
 screensavers_ = []
 
-
 class Selfieboot(picamera.PiCamera):
-    _time_last_picture = 0
+    _time_last_press = 0
     _screensavers = []
     _screensaver_overlay = None
-
-    def _save_image(self, img):
-        img.save("images/%d.jpeg"%int(press_time), "JPEG")
+    _press_allowed = False
 
     def add_img_overlay(self, filename, where=None, fullscreen=False, alpha = 255, layer = 99):
         if not where or where != "top" or where != "bottom":
@@ -57,22 +66,23 @@ class Selfieboot(picamera.PiCamera):
         self._screensavers.append(path)
 
     def check_screensaver(self):
-        if time() - self._time_last_picture > SCREENSAVER_TIME:
+        if time() - self._time_last_press > SCREENSAVER_TIME:
             shuffle(self._screensavers)
             screensaver = self._screensavers[0]
 
             slide_start_time = time()
 
             if self._screensaver_overlay:
-                tmp_screensaver_overlay = self.add_img_overlay(screensaver, layer = 10)
                 self.remove_overlay(self._screensaver_overlay)
-                self._screensaver_overlay = tmp_screensaver_overlay
-            else:
-                self._screensaver_overlay = self.add_img_overlay(screensaver, layer = 10)
+                self._screensaver_overlay = None
+
+            self._screensaver_overlay = self.add_img_overlay(screensaver, layer = 10)
 
             while time() - slide_start_time < SCREENSAVER_SLIDE_TIME:
                 if self.push_button_pressed():
-                    self.remove_overlay(screensaver_overlay)
+                    if self._screensaver_overlay:
+                        self.remove_overlay(self._screensaver_overlay)
+                        self._screensaver_overlay = None
                     break
 
     def make_picture(self):
@@ -125,13 +135,19 @@ class Selfieboot(picamera.PiCamera):
         self.remove_overlay(capture_overlay)
 
         # Store the image
-        self._save_image(img)
+        img.save("images/%d.jpeg"%int(press_time), "JPEG")
 
         self._time_last_picture = time()
 
     def push_button_pressed(self):
         sleep(.01)
-        return True
+        if GPIO.event_detected(17) and self._press_allowed:
+            self._time_last_press = time()
+            self._press_allowed = False
+            return True
+
+        self._press_allowed = True
+        return False
 
 with Selfieboot() as boot:
     boot.resolution = (1280, 720)
