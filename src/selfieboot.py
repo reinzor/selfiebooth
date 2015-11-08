@@ -1,12 +1,5 @@
 #!/usr/bin/python
 
-import os.path
-import sys
-
-if len(sys.argv) == 1 and not os.path.isfile("/home/pi/selfieboot/images/alive"):
-    print "ERROR: NO USB STICK WITH ALIVE FILE FOUND IN 'images' FOLDER"
-    sys.exit(1)
-
 import picamera
 import io
 from PIL import Image
@@ -15,27 +8,28 @@ from collections import deque
 
 # GPIO
 import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.IN, GPIO.PUD_UP)
-GPIO.add_event_detect(17, GPIO.FALLING)
-
-# PARAMS
-ROOT = "/home/pi/selfieboot/"
-COUNTDOWN_TIME = 4
-FREEZE_TIME = 4
-FLASH_TIME = 1
-SCREENSAVER_TIME = 60
-SCREENSAVER_SLIDE_TIME = 10
-
-# vars
-
-screen_width_ = 1024
-screen_height_ = 768
 
 class Selfieboot(picamera.PiCamera):
     _time_last_press = 0
     _screensavers = deque()
     _screensaver_overlay = None
+
+    def __init__(self, width, height):
+        super(Selfieboot, self).__init__()
+
+        self.resolution = (width, height)
+        self.framerate = 24
+        self.start_preview()
+
+        top_layer = boot.add_img_overlay(ROOT + "assets/top.png", where="top", layer=3)
+            bottom_layer = boot.add_img_overlay(ROOT + "assets/bottom.png", where="bottom", layer=4)
+
+        self._setup_gpio()        
+
+    def _setup_gpio(self):
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(17, GPIO.IN, GPIO.PUD_UP)
+        GPIO.add_event_detect(17, GPIO.FALLING)
 
     def add_img_overlay(self, filename, where=None, fullscreen=False, alpha = 255, layer = 99):
         if not where or where != "top" or where != "bottom":
@@ -147,24 +141,12 @@ class Selfieboot(picamera.PiCamera):
 
         return False
 
-with Selfieboot() as boot:
-    boot.resolution = (1280, 720)
-    boot.framerate = 24
-    boot.start_preview()
+    def run(self):
+        # Run it
+        while True:
+            # Always check the pushbutton press
+            if self.push_button_pressed():
+                self.make_picture()
 
-    top_layer = boot.add_img_overlay(ROOT + "assets/top.png", where="top", layer=3)
-    bottom_layer = boot.add_img_overlay(ROOT + "assets/bottom.png", where="bottom", layer=4)
-
-    boot.add_screensaver(ROOT + "assets/slide1.png")
-    boot.add_screensaver(ROOT + "assets/slide2.png")
-    boot.add_screensaver(ROOT + "assets/slide3.png")
-    boot.add_screensaver(ROOT + "assets/slide4.png")
-
-    # Run it
-    while True:
-        # Always check the pushbutton press
-        if boot.push_button_pressed():
-            boot.make_picture()
-
-        # Check the screensaver
-        boot.check_screensaver()
+            # Check the screensaver
+            self.check_screensaver()   

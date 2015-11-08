@@ -1,0 +1,23 @@
+# Selfieboot Assets
+bottom_image: bottom.png
+top_image: top.png
+flash_image: white.png
+countdown_images: ['countdown1.png', 'countdown2.png', 'countdown3.png', 'countdown4.png']
+screensaver_images: ['slide1.png', 'slide2.png', 'slide3.png', 'slide4.png']
+
+# Making the picture
+flash_time: 1
+freeze_time: 4
+
+# Screensaver
+screensaver_time: 60
+screensaver_slide_time: 10
+
+# Screen specific things
+screen_width: 1024
+screen_height: 768
+
+# Output
+raw_output_dir: raw
+overlay_image: overlay.png 
+overlayed_output_dir: overlayed
