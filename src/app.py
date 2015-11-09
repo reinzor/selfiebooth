@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# from selfieboot import Selfieboot
+from selfieboot import Selfieboot
 
 import sys, os
 import yaml
@@ -21,32 +21,38 @@ try:
             sys.exit()
 
         # Check if we have everything in the config
-        bottom_image = "%s/%s"%(config_dirname, cfg['bottom_image'])
-        top_image = "%s/%s"%(config_dirname, cfg['top_image'])
-        flash_image = "%s/%s"%(config_dirname, cfg['flash_image'])
-        countdown_images = ["%s/%s"%(config_dirname, i) for i in cfg['countdown_images']]
-        screensaver_images = ["%s/%s"%(config_dirname, i) for i in cfg['screensaver_images']]
+        try: 
+            bottom_image = "%s/%s"%(config_dirname, cfg['bottom_image'])
+            top_image = "%s/%s"%(config_dirname, cfg['top_image'])
+            flash_image = "%s/%s"%(config_dirname, cfg['flash_image'])
+            countdown_images = ["%s/%s"%(config_dirname, i) for i in cfg['countdown_images']]
+            screensaver_images = ["%s/%s"%(config_dirname, i) for i in cfg['screensaver_images']]
 
-        flash_time = float(cfg['flash_time'])
-        freeze_time = float(cfg['freeze_time'])
+            flash_time = float(cfg['flash_time'])
+            freeze_time = float(cfg['freeze_time'])
 
-        screensaver_time = float(cfg['screensaver_time'])
-        screensaver_slide_time = float(cfg['screensaver_slide_time'])
+            screensaver_time = float(cfg['screensaver_time'])
+            screensaver_slide_time = float(cfg['screensaver_slide_time'])
 
-        # Screen specific things
-        screen_width = int(cfg['screen_width'])
-        screen_height = int(cfg['screen_height'])
+            # Screen specific things
+            screen_width = int(cfg['screen_width'])
+            screen_height = int(cfg['screen_height'])
 
-        # Output
-        raw_output_dir = "%s/%s"%(config_dirname, cfg['raw_output_dir'])
-        overlay_image = "%s/%s"%(config_dirname, cfg['overlay_image'])
-        overlayed_output_dir = "%s/%s"%(config_dirname, cfg['overlayed_output_dir'])  
+            # Output
+            raw_output_dir = "%s/%s"%(config_dirname, cfg['raw_output_dir'])
+            overlay_image = "%s/%s"%(config_dirname, cfg['overlay_image'])
+            overlayed_output_dir = "%s/%s"%(config_dirname, cfg['overlayed_output_dir'])
+        except Exception as e:
+            print "Invalid configuration file. Key %s not present." % str(e)
+            sys.exit()
 
         with Selfieboot(screen_width, 
-                        screen_height
+                        screen_height,
                         bottom_image,
                         top_image,
                         flash_image,
+                        countdown_images,
+                        screensaver_images,
                         flash_time,
                         freeze_time,
                         screensaver_time,
@@ -54,11 +60,6 @@ try:
                         raw_output_dir,
                         overlay_image,
                         overlayed_output_dir) as boot:
-
-            boot.add_screensaver(ROOT + "assets/slide1.png")
-            boot.add_screensaver(ROOT + "assets/slide2.png")
-            boot.add_screensaver(ROOT + "assets/slide3.png")
-            boot.add_screensaver(ROOT + "assets/slide4.png")
 
             boot.run()
 
