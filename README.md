@@ -1,4 +1,5 @@
 # Selfiebooth Baas van Horst aan de Maas
+![Illustration Selfiebooth](illustration.png)
 Python code and assets Selfiebooth Baas van Horst aan de Maas.
 
 ## Hardware setup 
