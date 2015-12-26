@@ -1,6 +1,6 @@
 import io, os
 from PIL import Image
-from time import sleep, time
+from time import sleep, time, strftime
 from collections import deque
 from random import shuffle
 
@@ -10,55 +10,32 @@ import RPi.GPIO as GPIO
 
 class Selfieboot(picamera.PiCamera):
 
-    def __init__(self, 
-                 screen_width, 
-                 screen_height,
-                 bottom_image,
-                 top_image,
-                 flash_image,
-                 countdown_images,
-                 screensaver_images,
-                 flash_time,
-                 freeze_time,
-                 screensaver_time,
-                 screensaver_slide_time,
-                 raw_output_dir,
-                 overlay_image,
-                 overlayed_output_dir):
+    def __init__(self, config, raw_output_dir):
 
         # Call the picamera constructor
         super(Selfieboot, self).__init__()
 
         # Picamera setup
-        self.resolution = (screen_width, screen_height)
+        self.resolution = (config.screen_width, config.screen_height)
         self.framerate = 24
+        self.hflip = True
         self.start_preview()
 
-        self._top_overlay = self._add_img_overlay(top_image, where="top", layer=3)
-        self._bottom_overlay = self._add_img_overlay(bottom_image, where="bottom", layer=4)
-        self._flash_overlay = self._add_img_overlay(flash_image, layer=999)
+        self._top_overlay = self._add_img_overlay(config.top_image, where="top", layer=4)
+        self._bottom_overlay = self._add_img_overlay(config.bottom_image, where="bottom", layer=5)
+        self._flash_overlay = self._add_img_overlay(config.flash_image, layer=255)
 
         self._time_last_press = 0
     
-        self._screensaver_overlays = [self._add_img_overlay(screensaver_image, layer=100+idx) for idx, screensaver_image in enumerate(screensaver_images)]
-        self._countdown_overlays = [self._add_img_overlay(countdown_image, layer=200+idx) for idx, countdown_image in enumerate(countdown_images)]
+        self._screensaver_overlays = [self._add_img_overlay(screensaver_image, layer=50+idx) for idx, screensaver_image in enumerate(config.screensaver_images)]
+        self._countdown_overlays = [self._add_img_overlay(countdown_image, layer=100+idx) for idx, countdown_image in enumerate(config.countdown_images)]
 
-        self._flash_time = flash_time
-        self._freeze_time = freeze_time
-        self._screensaver_time = screensaver_time
-        self._screensaver_slide_time = screensaver_slide_time
+        self._flash_time = config.flash_time
+        self._freeze_time = config.freeze_time
+        self._screensaver_time = config.screensaver_time
+        self._screensaver_slide_time = config.screensaver_slide_time
 
         self._raw_output_dir = raw_output_dir
-        self._overlay_image = overlay_image # TODO, use this one
-        self._overlayed_output_dir = overlayed_output_dir
-
-        # Check if folders exist
-        if not os.path.isdir(raw_output_dir):
-            print "Raw output dir %s does not exist!" % raw_output_dir
-            sys.exit()
-        if not os.path.isdir(overlayed_output_dir):
-            print "Overlayed output dir %s does not exist!" % overlayed_output_dir
-            sys.exit()
 
         self._setup_gpio()   
 
@@ -70,9 +47,9 @@ class Selfieboot(picamera.PiCamera):
         GPIO.add_event_detect(17, GPIO.FALLING)
 
     def _setup_overlays(self):
-        self._flash_layer.opacity = 0
+        self._flash_overlay.alpha = 0
         for overlay in self._screensaver_overlays + self._countdown_overlays:
-            overlay.opacity = 0
+            overlay.alpha = 0
 
     def _add_img_overlay(self, filename, where=None, fullscreen=False, alpha = 255, layer = 99):
         if not where or where != "top" or where != "bottom":
@@ -109,23 +86,26 @@ class Selfieboot(picamera.PiCamera):
             shuffle(screensavers)
 
             slide_start_time = time()
-            screensavers[0].opacity = 255
+            screensavers[0].alpha = 255
 
             while not self._push_button_pressed():
                 if time() - slide_start_time > self._screensaver_slide_time:
-                    screensavers[0].opacity = 0
+                    screensavers[0].alpha = 0
                     screensavers.rotate()
-                    screensavers[0].opacity = 255
+                    screensavers[0].alpha = 255
                     slide_start_time = time()
 
-            screensavers[0].opacity = 255
+            screensavers[0].alpha = 0
 
     def _make_picture(self):
         # Countdown
         for overlay in self._countdown_overlays:
-            overlay.opacity = 255
+            overlay.alpha = 255
             sleep(1)
-            overlay.opacity = 0
+            overlay.alpha = 0
+
+        # Flash overlay
+        self._flash_overlay.alpha = 255
 
         # Take picture 
         stream = io.BytesIO()
@@ -136,24 +116,23 @@ class Selfieboot(picamera.PiCamera):
         # Picture to overlay
         pad = Image.new('RGB', ( ((img.size[0] + 31) // 32) * 32, ((img.size[1] + 15) // 16) * 16, ))
         pad.paste(img, (0, 0))
-        capture_overlay = self.add_overlay(pad.tostring(), size=img.size, fullscreen=True, alpha=255, layer=13)
+        capture_overlay = self.add_overlay(pad.tostring(), size=img.size, fullscreen=True, alpha=255, layer=3)
 
         start_freeze_time = time()
         while time() - start_freeze_time < self._freeze_time:
             duration = time() - start_freeze_time
+            print duration
 
             if duration < self._flash_time:
-                flash_overlay.alpha = int ( ( (self._flash_time - duration) / self._flash_time ) * 255 )
+                self._flash_overlay.alpha = int ( ( (self._flash_time - duration) / self._flash_time ) * 255 )
 
-            self.push_button_pressed(always_false=True)
+            self._push_button_pressed(always_false=True)
 
-        self._flash_overlay.opacity = 0
+        self._flash_overlay.alpha = 0
         self.remove_overlay(capture_overlay)
 
         # Store the image
-        img.save("%s/images/%d.jpeg" % (self._raw_output_dir, int(start_freeze_time)), "JPEG")
-
-        # TODO: Create overlay image and save to overlayed_output_dir
+        img.save("%s/%s.jpeg" % (self._raw_output_dir, strftime("%Y_%m_%d_%H_%M_%S")), "JPEG")
 
         self._time_last_picture = time()
 
