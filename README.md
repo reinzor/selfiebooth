@@ -7,11 +7,10 @@ Python code and assets Selfiebooth Baas van Horst aan de Maas.
 
 ## Software setup
 
-1. Clone this repository
+### 1. Clone this repository
     git clone https://github.com/reinzor/selfieboot.git /home/pi/selfiebooth
-2. Add to startup (rc.local)
+### 2. Add to startup (rc.local)
     sudo vim /etc/rc.local
-   Add the following line:
     sudo /home/pi/selfiebooth/app.py 
 
 ## Configuration file 
