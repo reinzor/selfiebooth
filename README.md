@@ -1,4 +1,8 @@
 # Selfiebooth Baas van Horst aan de Maas
+## TODO
+- Add GPIO Setup in README
+- Automatic overlay ?
+
 ![Illustration Selfiebooth](illustration.png)
 Python code and assets Selfiebooth Baas van Horst aan de Maas.
 
