@@ -19,16 +19,16 @@ The app searches for an USB stick that is inserted to the pi. If a config folder
 directory existed; a backup will be created. 
 
 ### Config file parameters
-bottom_image: image path
-top_image: image path
-flash_image: image path
-countdown_images: list of image paths, every image takes 1 second
-screensaver_images: list of image paths
-flash_time: time in secs
-freeze_time: time in secs
-screensaver_time: time in secs
-screensaver_slide_time: time in secs
-screen_width: pixel size
-screen_height: pixel size
+- bottom_image: image path
+- top_image: image path
+- flash_image: image path
+- countdown_images: list of image paths, every image takes 1 second
+- screensaver_images: list of image paths
+- flash_time: time in secs
+- freeze_time: time in secs
+- screensaver_time: time in secs
+- screensaver_slide_time: time in secs
+- screen_width: pixel size
+- screen_height: pixel size
 
 All specified paths are relative to the config file
