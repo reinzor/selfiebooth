@@ -3,12 +3,12 @@
 from selfieboot import Selfieboot
 from load_usb import load_usb
 
-import sys, os
-import yaml
+# Mounting point
+usb_mount = "/mnt/usb"
 
 # Blocking until proper usb is inserted
-config = load_usb()
+config = load_usb(usb_mount)
 
 # Run that thing
-boot = Selfieboot(config, "/mnt/usb")
+boot = Selfieboot(config, usb_mount)
 boot.run()

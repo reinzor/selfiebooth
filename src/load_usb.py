@@ -6,14 +6,14 @@ from shutil import copytree, rmtree
 from mount_usb import mount_usb
 from load_config import load_config
 
-def load_usb():
+def load_usb(usb_mount):
     # Blocking call untill usb stick can be mounted
-    mount_usb()
+    mount_usb(usb_mount)
 
     # Try to load the config on the usb stick
-    config_dir = "/mnt/usb/config"
+    config_dir = "%s/config" % usb_mount
     default_config_dir = "%s/../default_config" % os.path.dirname(os.path.realpath(__file__))
-    config_path = "/mnt/usb/config/config.yaml"
+    config_path = "%s/config/config.yaml" % usb_mount
 
     config = load_config(config_path)
     while config is None:

@@ -2,7 +2,7 @@
 
 import os, glob, time
 
-def mount_usb():
+def mount_usb(mounting_point):
     while True:
         usb_partitions = glob.glob("/dev/sd[a-z][0-9]")
 
@@ -10,7 +10,6 @@ def mount_usb():
             print "I did not find an usb-stick, please insert a valid preferably FAT32 formatted usb stick ..."
         else:
             for usb_partition in usb_partitions:
-                mounting_point = "/mnt/usb"
                 cmd_mkdir = "mkdir -p %s" % mounting_point
 
                 print "Creating mounting point @ %s (%s)"%(mounting_point, cmd_mkdir)

@@ -23,6 +23,28 @@ class Config():
                 string += "\n%s = %s" % (member, getattr(self, member))
         return string
 
+    def valid(self):
+        # Check if all images exist
+        images = [self.bottom_image, self.top_image, self.flash_image] + self.countdown_images + self.screensaver_images
+        for image in images:
+            if not os.path.exists(image):
+                print "Image '%s' does not exist" % image
+                return False
+
+        if self.flash_time <= 0 or self.flash_time > 100 or self.freeze_time <= 0 or self.freeze_time > 100 or self.flash_time > self.freeze_time:
+            print "Invalid flash_time or freeze time (%f,%f). Both should be > 0 and < 100 and freeze_time > flash_time" % (self.flash_time, self.freeze_time)
+            return False
+
+        if self.screen_width <= 0 or self.screen_height <= 0:
+            print "Invalid screen_width or screen_height (%d,%d)" % (self.screen_width, self.screen_height)
+            return False
+
+        if self.screensaver_time <= 0 or self.screensaver_slide_time <= 0:
+            print "Invalid screensaver_time or screensaver_slide_time (%d,%d), should both be larger than 0" % (self.screensaver_time, self.screensaver_slide_time)
+            return False
+
+        return True
+
 def load_config(path):
 
     print "Trying to load the configuration @ '%s'"%path
@@ -53,7 +75,9 @@ def load_config(path):
                     config.screen_width = int(cfg['screen_width'])
                     config.screen_height = int(cfg['screen_height'])
 
-                    return config
+                    if config.valid():
+                        return config
+
                 except Exception as e:
                     print "Invalid configuration file. Key %s not present." % str(e)
             except:
