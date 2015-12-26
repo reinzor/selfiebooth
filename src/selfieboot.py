@@ -56,11 +56,7 @@ class Selfieboot(picamera.PiCamera):
             x = 0
             y = 0
 
-        try:
-            img = Image.open(filename)
-        except Exception as e:
-            print e
-            sys.exit()
+        img = Image.open(filename)
 
         width = img.size[0]
         height = img.size[1]
@@ -121,7 +117,6 @@ class Selfieboot(picamera.PiCamera):
         start_freeze_time = time()
         while time() - start_freeze_time < self._freeze_time:
             duration = time() - start_freeze_time
-            print duration
 
             if duration < self._flash_time:
                 self._flash_overlay.alpha = int ( ( (self._flash_time - duration) / self._flash_time ) * 255 )
