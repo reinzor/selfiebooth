@@ -11,7 +11,7 @@ Python code and assets Selfiebooth Baas van Horst aan de Maas.
     git clone https://github.com/reinzor/selfieboot.git /home/pi/selfiebooth
 ### 2. Add to startup (rc.local)
     sudo vim /etc/rc.local
-    sudo /home/pi/selfiebooth/app.py 
+    sudo /home/pi/selfiebooth/src/app.py 
 
 ## Configuration file 
 The app searches for an USB stick that is inserted to the pi. If a config folder exists with a config.yaml, it will try to load this configuration. If none is found the default_config will be copied to the USB. If another config
