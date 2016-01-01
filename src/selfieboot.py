@@ -2,7 +2,7 @@ import io, os
 from PIL import Image
 from time import sleep, time, strftime
 from collections import deque
-from random import shuffle
+from random import shuffle, randint
 
 # RPI stuff
 import picamera
@@ -26,7 +26,7 @@ class Selfieboot(picamera.PiCamera):
         self._flash_overlay = self._add_img_overlay(config.flash_image, layer=255)
 
         self._time_last_press = 0
-    
+
         self._screensaver_overlays = [self._add_img_overlay(screensaver_image, layer=50+idx) for idx, screensaver_image in enumerate(config.screensaver_images)]
         self._countdown_overlays = [self._add_img_overlay(countdown_image, layer=100+idx) for idx, countdown_image in enumerate(config.countdown_images)]
 
@@ -37,9 +37,9 @@ class Selfieboot(picamera.PiCamera):
 
         self._raw_output_dir = raw_output_dir
 
-        self._setup_gpio()   
+        self._setup_gpio()
 
-        self._setup_overlays()     
+        self._setup_overlays()
 
     def _setup_gpio(self):
         GPIO.setmode(GPIO.BCM)
@@ -68,11 +68,11 @@ class Selfieboot(picamera.PiCamera):
         pad = Image.new('RGB', ( ((width + 31) // 32) * 32, ((height + 15) // 16) * 16, ))
         pad.paste(img, (0, 0))
 
-        return self.add_overlay(pad.tostring(), 
-                size=img.size, 
+        return self.add_overlay(pad.tostring(),
+                size=img.size,
                 fullscreen=fullscreen,
-                window=[x, y, width, height ], 
-                alpha=alpha, 
+                window=[x, y, width, height ],
+                alpha=alpha,
                 layer=layer)
 
     def _check_screensaver(self):
@@ -103,7 +103,7 @@ class Selfieboot(picamera.PiCamera):
         # Flash overlay
         self._flash_overlay.alpha = 255
 
-        # Take picture 
+        # Take picture
         stream = io.BytesIO()
         self.capture(stream, format="jpeg")
         stream.seek(0)
@@ -127,7 +127,7 @@ class Selfieboot(picamera.PiCamera):
         self.remove_overlay(capture_overlay)
 
         # Store the image
-        img.save("%s/%s.jpeg" % (self._raw_output_dir, strftime("%Y_%m_%d_%H_%M_%S")), "JPEG")
+        img.save("%s/%s_%d.jpeg" % (self._raw_output_dir, strftime("%Y_%m_%d_%H_%M_%S"), randint(0,1e10-1)), "JPEG")
 
         self._time_last_picture = time()
 
@@ -147,4 +147,4 @@ class Selfieboot(picamera.PiCamera):
                 self._make_picture()
 
             # Check the screensaver
-            self._check_screensaver()   
+            self._check_screensaver()
