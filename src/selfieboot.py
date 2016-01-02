@@ -21,6 +21,8 @@ class Selfieboot(picamera.PiCamera):
         self.hflip = True
         self.start_preview()
 
+        self._seq = 0
+
         self._top_overlay = self._add_img_overlay(config.top_image, where="top", layer=4)
         self._bottom_overlay = self._add_img_overlay(config.bottom_image, where="bottom", layer=5)
         self._flash_overlay = self._add_img_overlay(config.flash_image, layer=255)
@@ -127,7 +129,8 @@ class Selfieboot(picamera.PiCamera):
         self.remove_overlay(capture_overlay)
 
         # Store the image
-        img.save("%s/%s_%d.jpeg" % (self._raw_output_dir, strftime("%Y_%m_%d_%H_%M_%S"), randint(0,1e10-1)), "JPEG")
+        img.save("%s/%s_%d_%d.jpeg" % (self._raw_output_dir, strftime("%Y_%m_%d_%H_%M_%S"), self._seq, randint(0,1e10-1)), "JPEG")
+        self._seq += 1
 
         self._time_last_picture = time()
 
