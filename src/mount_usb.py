@@ -34,5 +34,8 @@ def mount_usb(mounting_point):
 
         sleep_seconds = 1
         print "Sleeping for %d seconds..." % sleep_seconds
-        print "IP: %s" % str([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
+        try:
+            print "IP: %s" % str([l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0])
+        except:
+            print "Network unreachable"
         time.sleep(sleep_seconds)

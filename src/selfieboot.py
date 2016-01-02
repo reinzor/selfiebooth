@@ -2,7 +2,10 @@ import io, os
 from PIL import Image
 from time import sleep, time, strftime
 from collections import deque
-from random import shuffle, randint
+from random import shuffle
+
+from logger import Logger
+from image_saver import ImageSaver
 
 # RPI stuff
 import picamera
@@ -15,13 +18,15 @@ class Selfieboot(picamera.PiCamera):
         # Call the picamera constructor
         super(Selfieboot, self).__init__()
 
+        # Create logger
+        self._logger = Logger(raw_output_dir)
+        self._logger.info('Selfiebooth started')
+
         # Picamera setup
         self.resolution = (config.screen_width, config.screen_height)
         self.framerate = 24
         self.hflip = True
         self.start_preview()
-
-        self._seq = 0
 
         self._top_overlay = self._add_img_overlay(config.top_image, where="top", layer=4)
         self._bottom_overlay = self._add_img_overlay(config.bottom_image, where="bottom", layer=5)
@@ -37,7 +42,7 @@ class Selfieboot(picamera.PiCamera):
         self._screensaver_time = config.screensaver_time
         self._screensaver_slide_time = config.screensaver_slide_time
 
-        self._raw_output_dir = raw_output_dir
+        self._image_saver = ImageSaver(raw_output_dir, self._logger)
 
         self._setup_gpio()
 
@@ -128,9 +133,7 @@ class Selfieboot(picamera.PiCamera):
         self._flash_overlay.alpha = 0
         self.remove_overlay(capture_overlay)
 
-        # Store the image
-        img.save("%s/%s_%d_%d.jpeg" % (self._raw_output_dir, strftime("%Y_%m_%d_%H_%M_%S"), self._seq, randint(0,1e10-1)), "JPEG")
-        self._seq += 1
+        self._image_saver.save(img)
 
         self._time_last_picture = time()
 
