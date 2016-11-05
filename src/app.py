@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 from selfiebooth import Selfiebooth
 from load_usb import load_usb

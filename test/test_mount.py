@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 from selfiebooth.mount_usb import mount_usb
 
