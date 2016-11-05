@@ -4,6 +4,7 @@ import os, sys
 
 from random import randint
 
+
 class ImageSaver():
     def __init__(self, raw_output_dir, logger):
         self._logger = logger
@@ -29,10 +30,12 @@ class ImageSaver():
         num_after = len(glob("%s/*.jpeg" % self._raw_output_dir))
 
         # Some logging
-        self._logger.info("Storing image to '%s', seq=%d, date=%s, num_before=%d, num_after=%d" % (img_path, self._seq, current_date, num_before, num_after) )
+        self._logger.info("Storing image to '%s', seq=%d, date=%s, num_before=%d, num_after=%d"
+                          % (img_path, self._seq, current_date, num_before, num_after) )
 
         if num_after != (num_before + 1):
-            self._logger.error("Image was not saved correctly to the USB for some reason! Try to restart the machine or try another USB stick!")
+            self._logger.error("Image was not saved correctly to the USB for some reason! "
+                               "Try to restart the machine or try another USB stick!")
             sys.exit(1)
 
         self._seq += 1

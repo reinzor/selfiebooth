@@ -1,6 +1,7 @@
 from time import strftime
 import os
 
+
 class Logger():
     def __init__(self, raw_output_dir):
         # create self._file

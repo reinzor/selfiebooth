@@ -1,6 +1,7 @@
 import os
 import yaml
 
+
 class Config():
     bottom_image = None
     top_image = None
@@ -15,6 +16,9 @@ class Config():
 
     screen_width = None
     screen_height = None
+
+    def __init__(self):
+        pass
 
     def __str__(self):
         string = "Config:\n---------------"
@@ -44,6 +48,7 @@ class Config():
             return False
 
         return True
+
 
 def load_config(path):
 

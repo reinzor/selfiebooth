@@ -6,6 +6,7 @@ from shutil import copytree, rmtree
 from mount_usb import mount_usb
 from load_config import load_config
 
+
 def load_usb(usb_mount):
     # Blocking call untill usb stick can be mounted
     mount_usb(usb_mount)

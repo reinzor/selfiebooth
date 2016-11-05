@@ -1,20 +1,33 @@
 # Selfiebooth Baas van Horst aan de Maas
-## TODO
-- Add GPIO Setup in README
-- Automatic overlay ?
 
 ![Illustration Selfiebooth](illustration.png)
 Python code and assets Selfiebooth Baas van Horst aan de Maas.
 
-## Hardware setup 
+## Hardware setup
 
-    Add readme for GPIO setup (hardware)
+### 1. Camera module
+
+Connect raspberry PI camera module to board
+
+### 2. GPIO setup for button
+
+TODO: Add readme for GPIO setup (hardware)
 
 ## Software setup
 
-### 1. Clone this repository
+### 1. Prerequisites
+
+- Raspbian
+- Enabled pi camera module (https://www.raspberrypi.org/documentation/usage/camera/)
+- Python image library
+- Python yaml library
+
+### 2. Clone this repository
+
     git clone https://github.com/reinzor/selfieboot.git /home/pi/selfiebooth
-### 2. Add to startup (rc.local)
+
+### 3. Add to startup (rc.local)
+
     sudo vim /etc/rc.local
     sudo /home/pi/selfiebooth/src/app.py 
 

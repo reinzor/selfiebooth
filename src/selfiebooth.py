@@ -1,6 +1,6 @@
-import io, os
+import io
 from PIL import Image
-from time import sleep, time, strftime
+from time import sleep, time
 from collections import deque
 from random import shuffle
 
@@ -11,12 +11,13 @@ from image_saver import ImageSaver
 import picamera
 import RPi.GPIO as GPIO
 
-class Selfieboot(picamera.PiCamera):
+
+class Selfiebooth(picamera.PiCamera):
 
     def __init__(self, config, raw_output_dir):
 
         # Call the picamera constructor
-        super(Selfieboot, self).__init__()
+        super(Selfiebooth, self).__init__()
 
         # Create logger
         self._logger = Logger(raw_output_dir)
@@ -34,8 +35,10 @@ class Selfieboot(picamera.PiCamera):
 
         self._time_last_press = 0
 
-        self._screensaver_overlays = [self._add_img_overlay(screensaver_image, layer=50+idx) for idx, screensaver_image in enumerate(config.screensaver_images)]
-        self._countdown_overlays = [self._add_img_overlay(countdown_image, layer=100+idx) for idx, countdown_image in enumerate(config.countdown_images)]
+        self._screensaver_overlays = [self._add_img_overlay(screensaver_image, layer=50+idx)
+                                      for idx, screensaver_image in enumerate(config.screensaver_images)]
+        self._countdown_overlays = [self._add_img_overlay(countdown_image, layer=100+idx)
+                                    for idx, countdown_image in enumerate(config.countdown_images)]
 
         self._flash_time = config.flash_time
         self._freeze_time = config.freeze_time
@@ -48,7 +51,8 @@ class Selfieboot(picamera.PiCamera):
 
         self._setup_overlays()
 
-    def _setup_gpio(self):
+    @staticmethod
+    def _setup_gpio():
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(17, GPIO.IN, GPIO.PUD_UP)
         GPIO.add_event_detect(17, GPIO.FALLING)
@@ -76,11 +80,11 @@ class Selfieboot(picamera.PiCamera):
         pad.paste(img, (0, 0))
 
         return self.add_overlay(pad.tostring(),
-                size=img.size,
-                fullscreen=fullscreen,
-                window=[x, y, width, height ],
-                alpha=alpha,
-                layer=layer)
+                                size=img.size,
+                                fullscreen=fullscreen,
+                                window=[x, y, width, height ],
+                                alpha=alpha,
+                                layer=layer)
 
     def _check_screensaver(self):
         if time() - self._time_last_press > self._screensaver_time:

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from selfieboot import Selfieboot
+from selfiebooth import Selfiebooth
 from load_usb import load_usb
 
 # Mounting point
@@ -10,5 +10,5 @@ usb_mount = "/mnt/usb"
 config = load_usb(usb_mount)
 
 # Run that thing
-boot = Selfieboot(config, usb_mount)
+boot = Selfiebooth(config, usb_mount)
 boot.run()
