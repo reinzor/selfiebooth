@@ -2,6 +2,7 @@
 bottom_image: bottom.png
 top_image: top.png
 flash_image: white.png
+overlay_image: overlay.png
 countdown_images: ['countdown3.png', 'countdown2.png', 'countdown1.png']
 screensaver_images: ['slide1.png', 'slide2.png', 'slide3.png', 'slide4.png']
 

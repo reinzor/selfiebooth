@@ -45,7 +45,7 @@ class Selfiebooth(picamera.PiCamera):
         self._screensaver_time = config.screensaver_time
         self._screensaver_slide_time = config.screensaver_slide_time
 
-        self._image_saver = ImageSaver(raw_output_dir, self._logger)
+        self._image_saver = ImageSaver(raw_output_dir, self._logger, config.overlay_image)
 
         self._setup_gpio()
 

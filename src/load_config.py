@@ -6,6 +6,7 @@ class Config():
     bottom_image = None
     top_image = None
     flash_image = None
+    overlay_image = None
     countdown_images = None
     screensaver_images = None
 
@@ -29,7 +30,7 @@ class Config():
 
     def valid(self):
         # Check if all images exist
-        images = [self.bottom_image, self.top_image, self.flash_image] + self.countdown_images + self.screensaver_images
+        images = [self.bottom_image, self.top_image, self.flash_image, self.overlay_image] + self.countdown_images + self.screensaver_images
         for image in images:
             if not os.path.exists(image):
                 print "Image '%s' does not exist" % image
@@ -69,6 +70,7 @@ def load_config(path):
                     config.bottom_image = "%s/%s"%(config_dirname, cfg['bottom_image'])
                     config.top_image = "%s/%s"%(config_dirname, cfg['top_image'])
                     config.flash_image = "%s/%s"%(config_dirname, cfg['flash_image'])
+                    config.overlay_image = "%s/%s"%(config_dirname, cfg['overlay_image'])
                     config.countdown_images = ["%s/%s"%(config_dirname, i) for i in cfg['countdown_images']]
                     config.screensaver_images = ["%s/%s"%(config_dirname, i) for i in cfg['screensaver_images']]
 
