@@ -18,23 +18,14 @@ TODO: Add readme for GPIO setup (hardware)
 ### 1. Prerequisites
 
 - Raspbian
-- Enabled pi camera module (https://www.raspberrypi.org/documentation/usage/camera/)
-- Python image library
-- Python yaml library
-- Python picamera library
-
-When you are on raspbian, please run the `install_deps` script:
-
-    ./install_deps
 
 ### 2. Clone this repository
 
     git clone https://github.com/reinzor/selfieboot.git /home/pi/selfiebooth
 
-### 3. Add to startup (rc.local)
+### 3. Run the install script
 
-    sudo vim /etc/rc.local
-    sudo /home/pi/selfiebooth/src/app.py 
+    ./install
 
 ## Configuration file 
 The app searches for an USB stick that is inserted to the pi. If a config folder exists with a config.yaml, it will try to load this configuration. If none is found the default_config will be copied to the USB. If another config

@@ -1,15 +1,22 @@
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 sudo apt install python-picamera python-pigpio python-yaml
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source $DIR/splashscreen/install 
+# Install splashscreen
+$DIR/splashscreen/install 
 
+# Fix screen settings
 echo "Setting resolution to 1024x768"
 sudo bash -c "echo 'hdmi_group=2' >> /boot/config.txt"
 sudo bash -c "echo 'hdmi_mode=16' >> /boot/config.txt"
+
+# Copy the app
+echo "Make sure that we start the app on startup"
+sudo cp $DIR/selfiebooth.service /etc/systemd/system/
+sudo bash -c "echo 'ExecStart=$DIR/src/app.py' >> /etc/systemd/system/selfiebooth.service"
+sudo systemctl enable selfiebooth.service
 
 echo ""
 read -n1 -r -p "Now please activate the raspberyy pi camera! Any key to continue..." key
 echo ""
 sudo raspi-config
-
-

@@ -1,0 +1,9 @@
+[Unit]
+Description=Selfiebooth app
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Restart=on-abort
+#ExecStart=/home/pi/selfiebooth/src/app.py (This line will be appended by installer)
