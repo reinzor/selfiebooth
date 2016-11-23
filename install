@@ -3,7 +3,13 @@ sudo apt install python-picamera python-pigpio python-yaml
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/splashscreen/install 
 
+echo "Setting resolution to 1024x768"
+sudo bash -c "echo 'hdmi_group=2' >> /boot/config.txt"
+sudo bash -c "echo 'hdmi_mode=16' >> /boot/config.txt"
+
 echo ""
 read -n1 -r -p "Now please activate the raspberyy pi camera! Any key to continue..." key
 echo ""
 sudo raspi-config
+
+
