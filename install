@@ -13,7 +13,7 @@ sudo bash -c "echo 'hdmi_mode=16' >> /boot/config.txt"
 # Copy the app
 echo "Make sure that we start the app on startup"
 sudo cp $DIR/selfiebooth.service /etc/systemd/system/
-sudo bash -c "echo 'ExecStart=$DIR/src/app.py' >> /etc/systemd/system/selfiebooth.service"
+sudo bash -c "echo 'ExecStart=$DIR/selfiebooth' >> /etc/systemd/system/selfiebooth.service"
 sudo systemctl enable selfiebooth.service
 
 echo ""
