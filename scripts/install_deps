@@ -1,0 +1,6 @@
+sudo apt install python-picamera python-pigpio python-yaml
+
+echo ""
+read -n1 -r -p "Now please activate the raspberyy pi camera! Any key to continue..." key
+echo ""
+sudo raspi-config

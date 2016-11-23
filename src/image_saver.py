@@ -59,7 +59,7 @@ class ImageSaver():
         try:
             overlay_image(img_path, self._overlay_image)
         except Exception as e:
-            self._logger("Failed to overlay the image: %s" % e)
+            self._logger.info("Failed to overlay the image: %s" % e)
 
         # Check how many image we have after storing
         num_after = len(glob("%s/*.jpeg" % self._raw_output_dir))
