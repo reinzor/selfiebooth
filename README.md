@@ -23,9 +23,9 @@ TODO: Add readme for GPIO setup (hardware)
 - Python yaml library
 - Python picamera library
 
-When you are on raspbian, please run the `install_deps` script in the script folder:
+When you are on raspbian, please run the `install_deps` script:
 
-    source scripts/install_deps
+    ./install_deps
 
 ### 2. Clone this repository
 

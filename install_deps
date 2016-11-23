@@ -1,5 +1,8 @@
 sudo apt install python-picamera python-pigpio python-yaml
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/splashscreen/install 
+
 echo ""
 read -n1 -r -p "Now please activate the raspberyy pi camera! Any key to continue..." key
 echo ""

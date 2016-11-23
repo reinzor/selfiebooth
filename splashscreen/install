@@ -1,0 +1,25 @@
+#!/bin/bash
+
+echo "Disable big splash screen raspberry pi"
+sudo bash -c "echo 'disable_splash=1' >> /boot/config.txt"
+
+echo "Removing login shell on TTY1"
+sudo systemctl disable getty@tty1
+
+echo "Installing fbi for custom splash screen linux"
+sudo apt install fbi
+
+# Get script dir
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+echo "Copying custom splash screen"
+sudo cp $DIR/splash.png /etc/
+
+echo "Copying custom splash screen init.d service"
+sudo cp $DIR/asplashscreen /etc/init.d/
+
+echo "Set permissions"
+sudo chmod a+x /etc/init.d/asplashscreen
+
+echo "Install for init mode"
+sudo insserv /etc/init.d/asplashscreen
