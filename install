@@ -1,6 +1,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-sudo apt install python-picamera python-pigpio python-yaml
+sudo apt-get -y install python-picamera python-pigpio python-yaml python-pil
 
 # Install splashscreen
 $DIR/splashscreen/install 
@@ -17,6 +17,6 @@ sudo bash -c "echo 'ExecStart=$DIR/selfiebooth' >> /etc/systemd/system/selfieboo
 sudo systemctl enable selfiebooth.service
 
 echo ""
-read -n1 -r -p "Now please activate the raspberyy pi camera! Any key to continue..." key
+read -n1 -r -p "Now please activate the raspberyy pi camera and reboot your pi! Any key to continue..." key
 echo ""
 sudo raspi-config

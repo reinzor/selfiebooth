@@ -7,7 +7,7 @@ echo "Set boot messages to tty3 and limit as much boot messages as possible"
 sudo bash -c "echo `cat /boot/cmdline.txt | sed 's/tty1/tty3/'`' quiet splash loglevel=3 logo.nologo vt.global_cursor_default=0' > /boot/cmdline.txt"
 
 echo "Installing fbi for custom splash screen linux"
-sudo apt install fbi
+sudo apt-get -y install fbi
 
 # Get script dir
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
