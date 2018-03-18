@@ -17,7 +17,7 @@ TODO: Add readme for GPIO setup (hardware)
 
 ### 1. Prepare raspberry pi image
 
-- Raspbian (tested with ![Jessie lite](http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-07-05/2017-07-05-raspbian-jessie-lite.zip)) installation on raspberry pi. Put a `ssh` file in the SD card boot partition to enable ssh server (to enable remote set-up).
+- Raspbian (tested with [Jessie lite](http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-07-05/2017-07-05-raspbian-jessie-lite.zip)) installation on raspberry pi. Put a `ssh` file in the SD card boot partition to enable ssh server (to enable remote set-up).
 
 ### 2. Clone this repository
 
