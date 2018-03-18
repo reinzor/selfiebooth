@@ -3,8 +3,8 @@
 echo "Disable big splash screen raspberry pi"
 sudo bash -c "echo 'disable_splash=1' >> /boot/config.txt"
 
-echo "Removing login shell on TTY1"
-sudo systemctl disable getty@tty1
+echo "Set boot messages to tty3 and limit as much boot messages as possible"
+sudo bash -c "echo `cat /boot/cmdline.txt | sed 's/tty1/tty3/'`' quiet splash loglevel=3 logo.nologo vt.global_cursor_default=0' > /boot/cmdline.txt"
 
 echo "Installing fbi for custom splash screen linux"
 sudo apt install fbi
@@ -12,14 +12,9 @@ sudo apt install fbi
 # Get script dir
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "Copying custom splash screen"
-sudo cp $DIR/splash.png /etc/
+# Copy the app
+echo "Make sure that we start the app on startup"
+sudo cp $DIR/splashscreen.service /etc/systemd/system/
+sudo bash -c "echo 'ExecStart=/usr/bin/fbi -d /dev/fb0 --noverbose -a $DIR/splash.png' >> /etc/systemd/system/splashscreen.service"
+sudo systemctl enable splashscreen.service
 
-echo "Copying custom splash screen init.d service"
-sudo cp $DIR/asplashscreen /etc/init.d/
-
-echo "Set permissions"
-sudo chmod a+x /etc/init.d/asplashscreen
-
-echo "Install for init mode"
-sudo insserv /etc/init.d/asplashscreen

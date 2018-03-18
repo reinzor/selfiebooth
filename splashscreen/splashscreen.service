@@ -1,0 +1,13 @@
+[Unit]
+Description=Splash screen
+DefaultDependencies=no
+After=local-fs.target
+
+[Install]
+WantedBy=sysinit.target
+
+[Service]
+StandardInput=tty
+StandardOutput=tty
+# ExecStart=/usr/bin/fbi -d /dev/fb0 --noverbose -a /opt/splash.png (This line will be appended by installer)
+
