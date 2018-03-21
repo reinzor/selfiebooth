@@ -1,6 +1,6 @@
 # Selfiebooth Baas van Horst aan de Maas
 
-![Illustration Selfiebooth](illustration.png)
+![Illustration Selfiebooth](doc/illustration.png)
 Python code and assets Selfiebooth Baas van Horst aan de Maas.
 
 ## Hardware setup
@@ -9,9 +9,23 @@ Python code and assets Selfiebooth Baas van Horst aan de Maas.
 
 Connect raspberry PI camera module to board
 
+![Camera connection](doc/camera_connection.png)
+
 ### 2. GPIO setup for button
 
-TODO: Add readme for GPIO setup (hardware)
+We use BCM pin 3 (index 5) since it has an internal pull-up resistor. This means that the digital value will get pulled-up 
+to 1 if it is floating (no connection to the ground or a 3v or 5v output). Pin 3 is floating when our switch is open, so since 
+we have a pull-up resistor, the digital value will be 1 when the swich (push button) is open (not pressed). If the push button
+is pressed, we would like the value to go from 1 to 0 and raise a falling event. Therefore, the other wire needs to be 
+attached to the ground (index 9). We use a pull-up vs a pull-down since it is less sensitive for interference.  
+
+Index 3 (BCM pin 3) and index 9 (ground) are illustrated in this figure:
+
+![GPIO set-up](doc/gpio_setup.png)
+
+Here you see a photo of the connection:
+
+![GPIO connection](doc/gpio_connection.png)
 
 ## Software setup
 

@@ -11,6 +11,8 @@ from image_saver import ImageSaver
 import picamera
 import RPi.GPIO as GPIO
 
+BCM_PIN = 3
+
 
 class Selfiebooth(picamera.PiCamera):
 
@@ -54,8 +56,8 @@ class Selfiebooth(picamera.PiCamera):
     @staticmethod
     def _setup_gpio():
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(17, GPIO.IN, GPIO.PUD_UP)
-        GPIO.add_event_detect(17, GPIO.FALLING)
+        GPIO.setup(BCM_PIN, GPIO.IN)
+        GPIO.add_event_detect(BCM_PIN, GPIO.FALLING)
 
     def _setup_overlays(self):
         self._flash_overlay.alpha = 0

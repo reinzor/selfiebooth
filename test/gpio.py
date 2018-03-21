@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 
-import os.path
-import sys
 from time import sleep
-
-# GPIO
 import RPi.GPIO as GPIO
+
+BCM_PIN = 3
+
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.IN, GPIO.PUD_UP)
-GPIO.add_event_detect(17, GPIO.FALLING)
+GPIO.setup(BCM_PIN, GPIO.IN)
+GPIO.add_event_detect(BCM_PIN, GPIO.FALLING)
 
 while True:
     sleep(.01)
-    if GPIO.event_detected(17):
+    if GPIO.event_detected(BCM_PIN):
         print "pressed" 
 
