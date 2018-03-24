@@ -145,7 +145,7 @@ class Selfiebooth(picamera.PiCamera):
 
     def _push_button_pressed(self, always_false=False):
         sleep(.01)
-        if GPIO.event_detected(17) and time() - self._time_last_press > 1.0 and not always_false:
+        if GPIO.event_detected(BCM_PIN) and time() - self._time_last_press > 1.0 and not always_false:
             self._time_last_press = time()
             return True
 
