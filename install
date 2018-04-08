@@ -9,6 +9,7 @@ $DIR/splashscreen/install
 echo "Setting resolution to 1024x768"
 sudo bash -c "echo 'hdmi_group=2' >> /boot/config.txt"
 sudo bash -c "echo 'hdmi_mode=16' >> /boot/config.txt"
+sudo bash -c "echo 'hdmi_force_hotplug=1' /boot/config.txt"
 
 # Copy the app
 echo "Make sure that we start the app on startup"
